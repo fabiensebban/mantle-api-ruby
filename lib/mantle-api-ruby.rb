@@ -17,7 +17,7 @@ class MantleClient
   # @raise [ArgumentError] If api_key is used in Rails frontend
   def initialize(app_id:, api_key: nil, customer_api_token: nil, api_url: 'https://appapi.heymantle.com/v1')
     raise ArgumentError, 'MantleClient app_id is required' unless app_id
-    raise ArgumentError, 'MantleClient apiKey should never be used in the browser' if defined?(Rails) && api_key
+    raise ArgumentError, 'MantleClient apiKey should never be used in the browser' if used_in_frontend? && api_key
     raise ArgumentError, 'MantleClient one of apiKey or customerApiToken is required' unless api_key || customer_api_token
 
     @app_id = app_id
@@ -272,5 +272,14 @@ class MantleClient
     path += "?#{URI.encode_www_form(query_params)}" unless query_params.empty?
     
     mantle_request(path: path, method: 'GET')
+  end
+
+  private
+
+  # Check if the code is running in an ERB template
+  #
+  # @return [Boolean] True if running in an ERB template, false otherwise
+  def used_in_frontend?
+    caller.any? { |line| line.include?('erb') || line.include?('template') }
   end
 end

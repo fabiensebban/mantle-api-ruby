@@ -38,6 +38,13 @@ RSpec.describe MantleClient do
         MantleClient.new(app_id: app_id)
       }.to raise_error(ArgumentError, 'MantleClient one of apiKey or customerApiToken is required')
     end
+
+    it 'raises error when api_key is used in Rails frontend' do
+      allow_any_instance_of(MantleClient).to receive(:used_in_frontend?).and_return(true)
+      expect {
+        MantleClient.new(app_id: app_id, api_key: api_key)
+      }.to raise_error(ArgumentError, 'MantleClient apiKey should never be used in the browser')
+    end
   end
 
   describe '#mantle_request' do
