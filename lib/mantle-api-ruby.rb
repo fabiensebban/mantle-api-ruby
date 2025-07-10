@@ -63,6 +63,11 @@ class MantleClient
     request.body = body.to_json if body
 
     response = http.request(request)
+
+    unless response.is_a?(Net::HTTPSuccess)
+      raise StandardError, "HTTP request failed with status #{response.code}: #{response.body}"
+    end
+
     JSON.parse(response.body)
   rescue => e
     puts "[mantleRequest] #{path} error: #{e.message}"
