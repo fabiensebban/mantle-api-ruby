@@ -13,7 +13,7 @@ begin
     app_id: 'your_mantle_app_id',
     api_key: 'your_mantle_api_key', # Use nil if calling from the client-side
     customer_api_token: nil, # Use the customer's API token if calling from the client-side
-    api_url: 'https://appapi.heymantle.com/v1'
+    api_url: 'https://appapi.heymantle.com/v1/'
   )
 
   # Example usage: Identify a customer
