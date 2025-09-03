@@ -71,16 +71,22 @@ class MantleClient
 
   # Identify a customer in Mantle
   #
-  # @param [String, nil] platform_id Platform-specific identifier for the customer
-  # @param [String, nil] access_token Platform-specific access token
-  # @param [String, nil] name Customer's name
-  # @param [String, nil] email Customer's email
-  # @param [String, nil] myshopify_domain Shopify store domain
   # @param [String] platform Platform identifier ('shopify', 'web', 'mantle')
+  # @param [String, nil] platform_id Platform-specific identifier for the customer
+  # @param [String, nil] platform_plan_name Name of the plan the customer is on for the platform. For Shopify this is the plan name
+  # @param [String, nil] myshopify_domain Shopify store domain
+  # @param [String, nil] access_token Platform-specific access token
+  # @param [String, nil] email Customer's email
   # @param [Hash, nil] custom_fields Additional customer data
+  # @param [String, nil] name Customer's name
+  # @param [String, nil] country_code Customer's country code
+  # @param [Boolean, nil] rotate_api_token Whether to rotate the API token
+  # @param [String, nil] default_billing_provider Default billing provider for the customer
+  # @param [String, nil] customer_email Customer's email
+  # @param [Array<String>, nil] tags Customer's tags
   # @return [Hash] The response from the Mantle API
   # @raise [ArgumentError] If required platform-specific identifiers are missing
-  def identify(platform_id: nil, access_token: nil, name: nil, email: nil, myshopify_domain: nil, platform: 'shopify', custom_fields: nil)
+  def identify(platform: 'shopify', platform_id: nil, platform_plan_name: nil, myshopify_domain: nil, access_token: nil, email: nil, custom_fields: nil, name: nil, country_code: nil, rotate_api_token: nil, default_billing_provider: nil, customer_email: nil, tags: nil)
     if platform == 'shopify' && platform_id.nil? && myshopify_domain.nil?
       raise ArgumentError, 'Either platform_id or myshopify_domain is required for Shopify platform'
     end
@@ -93,13 +99,19 @@ class MantleClient
       path: 'identify', 
       method: 'POST', 
       body: { 
-        platformId: platform_id,
-        myshopifyDomain: myshopify_domain,
         platform: platform,
+        platformId: platform_id,
+        platformPlanName: platform_plan_name,
+        myshopifyDomain: myshopify_domain,
         accessToken: access_token,
-        name: name,
         email: email,
-        customFields: custom_fields
+        customFields: custom_fields,
+        name: name,
+        countryCode: country_code,
+        rotateApiToken: rotate_api_token,
+        defaultBillingProvider: default_billing_provider,
+        customerEmail: customer_email,
+        tags: tags
       }.compact
     )
   end

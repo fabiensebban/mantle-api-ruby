@@ -91,25 +91,37 @@ RSpec.describe MantleClient do
     it 'sends identify request with correct parameters' do
       params = {
         platform_id: '123',
+        platform_plan_name: 'Pro',
         myshopify_domain: 'test.myshopify.com',
         platform: 'shopify',
         access_token: 'token',
         name: 'Test User',
         email: 'test@example.com',
-        custom_fields: { field: 'value' }
+        custom_fields: { field: 'value' },
+        country_code: 'US',
+        rotate_api_token: true,
+        default_billing_provider: 'stripe',
+        customer_email: 'customer@example.com',
+        tags: ['tag1', 'tag2']
       }
 
       expect(client).to receive(:mantle_request).with(
         path: 'identify',
         method: 'POST',
         body: {
-          platformId: '123',
-          myshopifyDomain: 'test.myshopify.com',
           platform: 'shopify',
+          platformId: '123',
+          platformPlanName: 'Pro',
+          myshopifyDomain: 'test.myshopify.com',
           accessToken: 'token',
           name: 'Test User',
           email: 'test@example.com',
-          customFields: { field: 'value' }
+          customFields: { field: 'value' },
+          countryCode: 'US',
+          rotateApiToken: true,
+          defaultBillingProvider: 'stripe',
+          customerEmail: 'customer@example.com',
+          tags: ['tag1', 'tag2']
         }
       ).and_return(success_response)
 
